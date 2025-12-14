@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>交換禮物注音謎題</title>
+
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(120deg, #1e1e2f, #2b2b44);
+      color: #fff;
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 30px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.45);
+      animation: fadeIn 0.6s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pop {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes bounce {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    h1 {
+      margin-top: 0;
+      text-align: center;
+      font-size: 26px;
+    }
+
+    .info {
+      text-align: center;
+      font-size: 14px;
+      opacity: 0.85;
+      margin-bottom: 22px;
+      line-height: 1.6;
+    }
+
+    label {
+      display: block;
+      margin-top: 16px;
+      font-size: 14px;
+    }
+
+    input {
+      width: 100%;
+      margin-top: 6px;
+      padding: 11px 12px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      font-size: 15px;
+    }
+
+    button {
+      margin-top: 24px;
+      width: 100%;
+      padding: 13px;
+      border-radius: 12px;
+      border: none;
+      background: #6c8cff;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: transform 0.12s ease, background 0.12s ease;
+    }
+
+    button:hover {
+      background: #809bff;
+      transform: translateY(-1px);
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    #successCard {
+      display: none;
+      text-align: center;
+      animation: pop 0.4s ease;
+    }
+
+    #successCard .gift {
+      font-size: 64px;
+      animation: bounce 1.2s infinite;
+    }
+
+    .note {
+      font-size: 12px;
+      opacity: 0.7;
+      margin-top: 6px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- 填寫表單 -->
+  <div class="card" id="formCard">
+    <h1>🎁 交換禮物注音謎題</h1>
+
+    <div class="info">
+      預算：約 350 元<br>
+      時間：1/1 ～ 1/8
+    </div>
+
+    <label>
+      姓名 / 暱稱
+      <input id="name" placeholder="例：杰森">
+    </label>
+
+    <label>
+      我想收到的禮物（注音）
+      <input id="zhuyin" placeholder="例：ㄇㄊㄔ 或 ㄐㄧ ㄔㄜ">
+      <div class="note">請使用注音符號，可用空白分隔</div>
+    </label>
+
+    <label>
+      提示（可選）
+      <input id="hint" placeholder="例：交通工具">
+    </label>
+
+    <button id="submitBtn">送出</button>
+  </div>
+
+  <!-- 成功畫面 -->
+  <div class="card" id="successCard">
+    <div class="gift">🎁</div>
+    <h1>送出成功！</h1>
+    <p>你已加入交換禮物名單</p>
+    <p style="opacity:0.85;">祝你收到超棒的禮物 ✨</p>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    const nameInput = document.getElementById("name");
+    const zhuyinInput = document.getElementById("zhuyin");
+    const hintInput = document.getElementById("hint");
+    const submitBtn = document.getElementById("submitBtn");
+
+    const formCard = document.getElementById("formCard");
+    const successCard = document.getElementById("successCard");
+
+    // ===== 注音輸入法處理 =====
+    let composing = false;
+
+    zhuyinInput.addEventListener("compositionstart", () => {
+      composing = true;
+    });
+
+    zhuyinInput.addEventListener("compositionend", () => {
+      composing = false;
+    });
+
+    zhuyinInput.addEventListener("keydown", (e) => {
+      if (e.key === " " && !composing) {
+        e.preventDefault();
+        zhuyinInput.value += " ";
+      }
+    });
+
+    // ===== 送出 =====
+    submitBtn.addEventListener("click", () => {
+      const name = nameInput.value.trim();
+      const zhuyin = zhuyinInput.value.trim();
+      const hint = hintInput.value.trim();
+
+      if (!name) {
+        alert("請填寫姓名或暱稱");
+        return;
+      }
+
+      if (!zhuyin) {
+        alert("請輸入注音謎題");
+        return;
+      }
+
+      const zhuyinRegex = /^[\u3105-\u3129\s]+$/;
+      if (!zhuyinRegex.test(zhuyin)) {
+        alert("注音欄位只能輸入注音符號（例如：ㄇㄊㄔ）");
+        return;
+      }
+
+      submitBtn.disabled = true;
+
+      fetch("/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, zhuyin, hint })
+      })
+      .then(res => {
+        if (!res.ok) throw new Error();
+        return res.json();
+      })
+      .then(() => {
+        formCard.style.display = "none";
+        successCard.style.display = "block";
+
+        // 清空表單（方便下一筆）
+        nameInput.value = "";
+        zhuyinInput.value = "";
+        hintInput.value = "";
+      })
+      .catch(() => {
+        alert("送出失敗，請再試一次");
+      })
+      .finally(() => {
+        submitBtn.disabled = false;
+      });
+    });
+  </script>
+
+</body>
+</html>
