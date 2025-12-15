@@ -281,21 +281,26 @@ body.flashy #successCard {
     });
 
     /* 禮物爆開 */
-    function explode() {
-      const emojis = ["🎉","✨","🎁","🎊","💫"];
-      for (let i = 0; i < 18; i++) {
-        const span = document.createElement("span");
-        span.textContent = emojis[Math.floor(Math.random()*emojis.length)];
-        span.style.setProperty("--x", `${(Math.random()-0.5)*240}px`);
-        span.style.setProperty("--y", `${(Math.random()-0.5)*200}px`);
-        confetti.appendChild(span);
-        setTimeout(() => span.remove(), 1000);
-      }
+   function explode() {
+  const emojis = ["🎉","🎊","✨","💥","🎁","🌈","🔥"];
+  for (let i = 0; i < 32; i++) {
+    const span = document.createElement("span");
+    span.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    span.style.setProperty("--x", `${(Math.random() - 0.5) * 360}px`);
+    span.style.setProperty("--y", `${(Math.random() - 0.5) * 300}px`);
+    span.style.left = "50%";
+    span.style.top = "40%";
+    confetti.appendChild(span);
+    setTimeout(() => span.remove(), 1300);
+  }
+}
+
     }
   </script>
 
 </body>
 </html>
+
 
 
 
