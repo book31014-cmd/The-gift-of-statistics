@@ -161,10 +161,40 @@
         transform: translate(var(--x), var(--y)) scale(1.4);
       }
     }
+    /* ===== 浮誇模式 ===== */
+body.flashy .card-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+body.flashy button {
+  background: linear-gradient(135deg, #ff7ad9, #6c8cff);
+  box-shadow: 0 0 20px rgba(255,122,217,0.6);
+}
+
+body.flashy button:hover {
+  transform: scale(1.08) rotate(-1deg);
+}
+
+body.flashy #successCard {
+  animation: megaPop 0.6s cubic-bezier(.3,1.4,.5,1);
+}
+
+@keyframes megaPop {
+  0% {
+    transform: scale(0.6) rotate(-8deg);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) rotate(0);
+    opacity: 1;
+  }
+}
+
   </style>
 </head>
 
-<body>
+<body class="flashy">
+
 
   <div class="card-float">
     <!-- 表單 -->
@@ -266,5 +296,6 @@
 
 </body>
 </html>
+
 
 
