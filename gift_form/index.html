@@ -6,6 +6,50 @@
   <title>交換禮物注音謎題</title>
 
   <style>
+    /* ===== 禮物終極動畫 ===== */
+.gift {
+  font-size: 80px;
+  animation: giftMega 1.6s cubic-bezier(.2,1.6,.4,1);
+}
+
+@keyframes giftMega {
+  0%   { transform: scale(0.2) rotate(-30deg); opacity: 0; }
+  40%  { transform: scale(1.4) rotate(10deg); opacity: 1; }
+  70%  { transform: scale(0.9) rotate(-6deg); }
+  100% { transform: scale(1.2) rotate(0deg); }
+}
+
+/* ===== 全畫面閃光 ===== */
+.flash {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle, rgba(255,255,255,.9), transparent 60%);
+  animation: flash 0.8s ease;
+  pointer-events: none;
+  z-index: 999;
+}
+
+@keyframes flash {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+/* ===== 彩帶雨 ===== */
+.ribbon {
+  position: fixed;
+  width: 10px;
+  height: 20px;
+  background: linear-gradient(135deg,#ffd700,#ff7ad9,#6c8cff);
+  animation: fall 2.5s linear forwards;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(120vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
     /* ===== 背景：高級微光流動 ===== */
     body {
       font-family: "Segoe UI", Arial, sans-serif;
