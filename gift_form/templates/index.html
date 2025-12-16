@@ -3,11 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
- <title>交換禮物注音謎題</title>
+  <title>交換禮物注音謎題</title>
 
   <style>
-    /* ===== 背景：微光流動 ===== */
+    /* ===== 背景微光流動 ===== */
     body {
       font-family: "Segoe UI", Arial, sans-serif;
       background: linear-gradient(120deg, #1e1e2f, #2b2b44);
@@ -23,287 +22,178 @@
     body::before {
       content: "";
       position: fixed;
-      inset: 0;
+      inset: -20%;
       background:
         radial-gradient(circle at 20% 30%, rgba(255,255,255,0.08), transparent 40%),
-        radial-gradient(circle at 80% 70%, rgba(108,140,255,0.12), transparent 40%);
-      animation: bgMove 14s ease-in-out infinite alternate;
+        radial-gradient(circle at 80% 70%, rgba(108,140,255,0.14), transparent 40%);
+      animation: bgFlow 18s ease-in-out infinite alternate;
       z-index: -1;
     }
 
-    @keyframes bgMove {
+    @keyframes bgFlow {
       from { transform: translate(0,0); }
-      to   { transform: translate(-20px, -20px); }
+      to { transform: translate(-40px, -30px); }
     }
 
-    /* ===== 外層漂浮 ===== */
+    /* ===== 卡片漂浮 ===== */
     .card-float {
       animation: float 6s ease-in-out infinite;
     }
 
     @keyframes float {
       0%,100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
+      50% { transform: translateY(-10px); }
     }
 
-    /* ===== 卡片本體 ===== */
+    /* ===== 卡片 ===== */
     .card {
       background: rgba(255,255,255,0.08);
-      border-radius: 18px;
-      padding: 30px;
+      border-radius: 20px;
+      padding: 28px;
       width: 100%;
       max-width: 440px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.45);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.5);
       animation: fadeIn 0.6s ease;
       position: relative;
+      backdrop-filter: blur(8px);
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(12px) scale(0.96); }
-      to   { opacity: 1; transform: translateY(0) scale(1); }
+      from { opacity: 0; transform: translateY(16px) scale(0.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    @keyframes pop {
-      from { opacity: 0; transform: scale(0.9); }
-      to   { opacity: 1; transform: scale(1); }
-    }
-
-    h1 {
-      margin-top: 0;
-      text-align: center;
-      font-size: 26px;
-    }
+    h1 { text-align: center; margin-top: 0; }
 
     .info {
       text-align: center;
       font-size: 14px;
       opacity: 0.85;
-      margin-bottom: 22px;
+      margin-bottom: 20px;
       line-height: 1.6;
     }
 
-    label {
-      display: block;
-      margin-top: 16px;
-      font-size: 14px;
-    }
+    label { display: block; margin-top: 16px; font-size: 14px; }
 
     input {
       width: 100%;
       margin-top: 6px;
-      padding: 11px 12px;
-      border-radius: 10px;
+      padding: 14px;
+      border-radius: 12px;
       border: none;
-      outline: none;
-      font-size: 15px;
-    }
-
-    #zhuyin:focus {
-      box-shadow: 0 0 0 2px rgba(108,140,255,0.6);
-      transition: box-shadow 0.3s;
-    }
-
-    .note {
-      font-size: 12px;
-      opacity: 0.7;
-      margin-top: 6px;
+      font-size: 16px;
     }
 
     button {
       margin-top: 24px;
       width: 100%;
-      padding: 13px;
-      border-radius: 12px;
+      padding: 16px;
+      border-radius: 14px;
       border: none;
-      background: #6c8cff;
+      background: linear-gradient(135deg, #ff7ad9, #6c8cff);
       color: white;
-      font-size: 16px;
+      font-size: 18px;
       cursor: pointer;
-      transition: transform 0.12s ease, background 0.12s ease;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      box-shadow: 0 0 20px rgba(255,122,217,0.6);
     }
 
-    button:hover {
-      background: #809bff;
-      transform: translateY(-1px);
-    }
-
-    button:active {
-      transform: scale(0.95);
-    }
+    button:hover { transform: scale(1.06); }
+    button:active { transform: scale(0.92); }
 
     /* ===== 成功畫面 ===== */
     #successCard {
       display: none;
       text-align: center;
-      animation: pop 0.4s ease;
-      position: relative;
+      animation: pop 0.5s cubic-bezier(.3,1.4,.5,1);
+    }
+
+    @keyframes pop {
+      from { transform: scale(0.6); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
     }
 
     .gift {
-      font-size: 64px;
+      font-size: 72px;
       animation: bounce 1.2s infinite;
     }
 
     @keyframes bounce {
       0%,100% { transform: translateY(0); }
-      50% { transform: translateY(-12px); }
+      50% { transform: translateY(-16px); }
     }
 
-    /* ===== 禮物爆開特效 ===== */
+    /* ===== 爆開特效 ===== */
     .confetti span {
       position: absolute;
-      font-size: 28px;
-      animation: explode 1s ease-out forwards;
+      font-size: 26px;
+      animation: explode 1.2s ease-out forwards;
+      pointer-events: none;
     }
 
     @keyframes explode {
-      from { opacity: 1; transform: translate(0,0) scale(0.5); }
+      from { opacity: 1; transform: translate(0,0) scale(0.6) rotate(0deg); }
       to {
         opacity: 0;
-        transform: translate(var(--x), var(--y)) scale(1.4);
+        transform: translate(var(--x), var(--y)) scale(1.4) rotate(720deg);
       }
     }
-    /* ===== 浮誇模式 ===== */
-body.flashy .card-float {
-  animation: float 4s ease-in-out infinite;
-}
 
-body.flashy button {
-  background: linear-gradient(135deg, #ff7ad9, #6c8cff);
-  box-shadow: 0 0 20px rgba(255,122,217,0.6);
-}
-
-body.flashy button:hover {
-  transform: scale(1.08) rotate(-1deg);
-}
-
-body.flashy #successCard {
-  animation: megaPop 0.6s cubic-bezier(.3,1.4,.5,1);
-}
-
-@keyframes megaPop {
-  0% {
-    transform: scale(0.6) rotate(-8deg);
-    opacity: 0;
-  }
-  100% {
-    transform: scale(1) rotate(0);
-    opacity: 1;
-  }
-}
-
+    /* ===== 手機優化 ===== */
+    @media (max-width: 480px) {
+      .card { max-width: 94vw; padding: 22px; }
+      h1 { font-size: 22px; }
+    }
   </style>
 </head>
 
-<body class="flashy">
-
-
+<body>
   <div class="card-float">
-    <!-- 表單 -->
     <div class="card" id="formCard">
       <h1>🎁 交換禮物注音謎題</h1>
+      <div class="info">預算：約 350 元<br>時間：1/1 ～ 1/8</div>
 
-      <div class="info">
-        預算：約 350 元<br>
-        時間：1/1 ～ 1/8
-      </div>
-
-      <label>
-        姓名 / 暱稱
-        <input id="name" placeholder="例：杰森">
-      </label>
-
-      <label>
-        我想收到的禮物（注音）
-        <input id="zhuyin" placeholder="例：ㄇㄊㄔ 或 ㄐㄧ ㄔㄜ">
-        <div class="note">請使用注音符號，可用空白分隔</div>
-      </label>
-
-      <label>
-        提示（可選）
-        <input id="hint" placeholder="例：交通工具">
-      </label>
-
+      <label>姓名<input id="name"></label>
+      <label>注音<input id="zhuyin"></label>
+      <label>提示<input id="hint"></label>
       <button id="submitBtn">送出</button>
     </div>
 
-    <!-- 成功 -->
     <div class="card" id="successCard">
       <div class="gift">🎁</div>
       <h1>送出成功！</h1>
-      <p>你已加入交換禮物名單</p>
-      <p style="opacity:0.85;">祝你收到超棒的禮物 ✨</p>
+      <p>祝你抽到神級禮物 ✨</p>
       <div class="confetti" id="confetti"></div>
     </div>
   </div>
 
   <script>
-    const nameInput = document.getElementById("name");
-    const zhuyinInput = document.getElementById("zhuyin");
-    const hintInput = document.getElementById("hint");
     const submitBtn = document.getElementById("submitBtn");
-
     const formCard = document.getElementById("formCard");
     const successCard = document.getElementById("successCard");
     const confetti = document.getElementById("confetti");
 
-    /* 注音輸入法處理 */
-    let composing = false;
-    zhuyinInput.addEventListener("compositionstart", () => composing = true);
-    zhuyinInput.addEventListener("compositionend", () => composing = false);
-    zhuyinInput.addEventListener("keydown", e => {
-      if (e.key === " " && !composing) {
-        e.preventDefault();
-        zhuyinInput.value += " ";
+    submitBtn.onclick = () => {
+      formCard.style.display = "none";
+      successCard.style.display = "block";
+      explode();
+    };
+
+    function explode() {
+      const emojis = ["🎉","🎊","✨","💥","🎁","🌈","🔥","💖"];
+      for (let i = 0; i < 36; i++) {
+        const s = document.createElement("span");
+        s.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+        s.style.left = "50%";
+        s.style.top = "40%";
+        s.style.setProperty("--x", `${(Math.random()-0.5)*420}px`);
+        s.style.setProperty("--y", `${(Math.random()-0.5)*360}px`);
+        confetti.appendChild(s);
+        setTimeout(()=>s.remove(),1400);
       }
-    });
-
-    submitBtn.addEventListener("click", () => {
-      const name = nameInput.value.trim();
-      const zhuyin = zhuyinInput.value.trim();
-      const hint = hintInput.value.trim();
-
-      if (!name || !zhuyin) {
-        alert("請填寫姓名與注音謎題");
-        return;
-      }
-
-      fetch("/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, zhuyin, hint })
-      })
-      .then(res => res.json())
-      .then(() => {
-        formCard.style.display = "none";
-        successCard.style.display = "block";
-        explode();
-      })
-      .catch(() => alert("送出失敗，請再試一次"));
-    });
-
-    /* 禮物爆開 */
-  function explode() {
-  const emojis = ["🎉","🎊","✨","💥","🎁","🌈","🔥"];
-  for (let i = 0; i < 32; i++) {
-    const span = document.createElement("span");
-    span.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-    span.style.setProperty("--x", `${(Math.random() - 0.5) * 360}px`);
-    span.style.setProperty("--y", `${(Math.random() - 0.5) * 300}px`);
-    span.style.left = "50%";
-    span.style.top = "40%";
-    confetti.appendChild(span);
-    setTimeout(() => span.remove(), 1300);
-  }
-}
-</script>
-
+    }
+  </script>
 </body>
 </html>
-
-
-
-
-
 
 
