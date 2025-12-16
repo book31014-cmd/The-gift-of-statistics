@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>陶藝社交換禮物</title>
+<title>陶藝社交換禮物1</title>
 
 <style>
 /* =========================================================
@@ -232,7 +232,7 @@ const sound=document.getElementById("sound");
    點擊送出
 ========================================================= */
 submit.onclick=()=>{
-  const name=nameInput.value=nameInput?.value||document.getElementById("name").value.trim();
+  const name = document.getElementById("name").value.trim();
   const zhuyin=document.getElementById("zhuyin").value.trim();
   const hint=document.getElementById("hint").value.trim();
   if(!name||!zhuyin||!hint){alert("請填完整");return;}
