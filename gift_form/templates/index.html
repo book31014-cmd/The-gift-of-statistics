@@ -63,7 +63,11 @@
       to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    h1 { text-align: center; margin-top: 0; }
+    h1 {
+      margin-top: 0;
+      text-align: center;
+      font-size: 26px;
+    }
 
     .info {
       text-align: center;
@@ -73,7 +77,11 @@
       line-height: 1.6;
     }
 
-    label { display: block; margin-top: 16px; font-size: 14px; }
+    label {
+      display: block;
+      margin-top: 16px;
+      font-size: 14px;
+    }
 
     input {
       width: 100%;
@@ -81,6 +89,7 @@
       padding: 14px;
       border-radius: 12px;
       border: none;
+      outline: none;
       font-size: 16px;
     }
 
@@ -148,51 +157,91 @@
 </head>
 
 <body>
+
   <div class="card-float">
+    <!-- 表單 -->
     <div class="card" id="formCard">
       <h1>🎁 交換禮物注音謎題</h1>
-      <div class="info">預算：約 350 元<br>時間：1/1 ～ 1/8</div>
+      <div class="info">
+        預算：約 350 元<br>
+        時間：1/1 ～ 1/8
+      </div>
 
-      <label>姓名<input id="name"></label>
-      <label>注音<input id="zhuyin"></label>
-      <label>提示<input id="hint"></label>
+      <label>姓名 / 暱稱
+        <input id="name" placeholder="例：杰森">
+      </label>
+
+      <label>我想收到的禮物（注音）
+        <input id="zhuyin" placeholder="例：ㄇㄊㄔ 或 ㄐㄧ ㄔㄜ">
+      </label>
+
+      <label>提示（可選）
+        <input id="hint" placeholder="例：交通工具">
+      </label>
+
       <button id="submitBtn">送出</button>
     </div>
 
+    <!-- 成功 -->
     <div class="card" id="successCard">
       <div class="gift">🎁</div>
       <h1>送出成功！</h1>
-      <p>祝你抽到神級禮物 ✨</p>
+      <p>你已加入交換禮物名單</p>
+      <p style="opacity:0.85;">祝你抽到神級禮物 ✨</p>
       <div class="confetti" id="confetti"></div>
     </div>
   </div>
+
+  <!-- 成功音效 -->
+  <audio id="successSound" preload="auto">
+    <source src="https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3" type="audio/mpeg">
+  </audio>
 
   <script>
     const submitBtn = document.getElementById("submitBtn");
     const formCard = document.getElementById("formCard");
     const successCard = document.getElementById("successCard");
     const confetti = document.getElementById("confetti");
+    const successSound = document.getElementById("successSound");
 
     submitBtn.onclick = () => {
       formCard.style.display = "none";
       successCard.style.display = "block";
+
       explode();
+
+      // 音效
+      successSound.currentTime = 0;
+      successSound.play().catch(()=>{});
+
+      // 手機震動
+      if (navigator.vibrate) {
+        navigator.vibrate([80, 40, 120, 40, 200]);
+      }
+
+      // 鎖定提示
+      const lock = document.createElement("p");
+      lock.textContent = "🔒 謎題已鎖定，無法再修改";
+      lock.style.opacity = "0.85";
+      lock.style.marginTop = "12px";
+      successCard.appendChild(lock);
     };
 
     function explode() {
       const emojis = ["🎉","🎊","✨","💥","🎁","🌈","🔥","💖"];
       for (let i = 0; i < 36; i++) {
         const s = document.createElement("span");
-        s.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+        s.textContent = emojis[Math.floor(Math.random() * emojis.length)];
         s.style.left = "50%";
         s.style.top = "40%";
-        s.style.setProperty("--x", `${(Math.random()-0.5)*420}px`);
-        s.style.setProperty("--y", `${(Math.random()-0.5)*360}px`);
+        s.style.setProperty("--x", `${(Math.random() - 0.5) * 420}px`);
+        s.style.setProperty("--y", `${(Math.random() - 0.5) * 360}px`);
         confetti.appendChild(s);
-        setTimeout(()=>s.remove(),1400);
+        setTimeout(() => s.remove(), 1400);
       }
     }
   </script>
+
 </body>
 </html>
 
