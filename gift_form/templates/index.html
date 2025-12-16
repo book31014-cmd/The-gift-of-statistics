@@ -6,163 +6,111 @@
 <title>交換禮物注音謎題</title>
 
 <style>
-/* ================= 背景微光流動（一定看得到） ================= */
+/* ===== 背景微光流動 ===== */
 body {
   font-family: "Segoe UI", Arial, sans-serif;
-  background: linear-gradient(120deg, #0f1020, #1c1f3a);
-  color: #fff;
-  min-height: 100vh;
-  margin: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
+  background: linear-gradient(120deg,#0f1020,#1c1f3a);
+  color:#fff;
+  min-height:100vh;
+  margin:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
 }
 
-body::before {
-  content: "";
-  position: fixed;
-  inset: -30%;
+body::before{
+  content:"";
+  position:fixed;
+  inset:-30%;
   background:
     radial-gradient(circle at 30% 40%, rgba(255,255,255,0.22), transparent 45%),
     radial-gradient(circle at 70% 60%, rgba(120,160,255,0.28), transparent 50%),
     radial-gradient(circle at 50% 50%, rgba(255,150,220,0.22), transparent 55%);
-  animation: bgFlow 10s ease-in-out infinite alternate;
-  filter: blur(3px);
-  z-index: -1;
+  animation:bgFlow 10s ease-in-out infinite alternate;
+  filter:blur(3px);
+  z-index:-1;
+}
+@keyframes bgFlow{
+  from{transform:translate(0,0) scale(1);}
+  to{transform:translate(-80px,-60px) scale(1.12);}
 }
 
-@keyframes bgFlow {
-  from { transform: translate(0,0) scale(1); }
-  to   { transform: translate(-80px,-60px) scale(1.12); }
+/* ===== IG Reels 過場 ===== */
+#reelsTransition{
+  position:fixed;
+  inset:0;
+  background:linear-gradient(160deg,#ff7ad9,#6c8cff);
+  transform:translateY(100%);
+  z-index:999;
+}
+#reelsTransition.active{
+  animation:reelsIn .6s cubic-bezier(.2,.9,.3,1) forwards;
+}
+@keyframes reelsIn{
+  from{transform:translateY(100%) scale(1.1);}
+  to{transform:translateY(0) scale(1);}
 }
 
-/* ================= IG Reels 過場遮罩 ================= */
-#reelsTransition {
-  position: fixed;
-  inset: 0;
-  background: linear-gradient(160deg,#ff7ad9,#6c8cff);
-  transform: translateY(100%);
-  z-index: 999;
+/* ===== 卡片 ===== */
+.card-float{animation:float 6s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
+
+.card{
+  background:rgba(255,255,255,.1);
+  backdrop-filter:blur(10px);
+  border-radius:22px;
+  padding:28px;
+  width:100%;
+  max-width:440px;
+  box-shadow:0 30px 80px rgba(0,0,0,.6);
+  animation:fadeIn .6s ease;
+}
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(20px) scale(.95);}
+  to{opacity:1;transform:translateY(0) scale(1);}
 }
 
-#reelsTransition.active {
-  animation: reelsIn 0.6s cubic-bezier(.2,.9,.3,1) forwards;
+h1{text-align:center;margin-top:0;}
+.info{text-align:center;font-size:14px;opacity:.85;margin-bottom:20px;}
+label{display:block;margin-top:16px;font-size:14px;}
+input{
+  width:100%;margin-top:6px;padding:14px;
+  border-radius:14px;border:none;font-size:16px;
 }
 
-@keyframes reelsIn {
-  0%   { transform: translateY(100%) scale(1.1); }
-  100% { transform: translateY(0) scale(1); }
+button{
+  margin-top:26px;width:100%;padding:16px;
+  border-radius:16px;border:none;
+  background:linear-gradient(135deg,#ff7ad9,#6c8cff);
+  color:#fff;font-size:18px;cursor:pointer;
+  box-shadow:0 0 28px rgba(255,122,217,.7);
+  transition:transform .15s ease;
+}
+button:hover{transform:scale(1.06);}
+button:active{transform:scale(.92);}
+
+/* ===== 成功畫面 ===== */
+#successCard{display:none;text-align:center;animation:pop .5s cubic-bezier(.3,1.4,.5,1);}
+@keyframes pop{from{opacity:0;transform:scale(.6);}to{opacity:1;transform:scale(1);}}
+
+.gift{font-size:84px;animation:bounce 1.2s infinite;}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-18px);}}
+
+/* ===== 爆炸 ===== */
+.confetti span{
+  position:absolute;
+  animation:explode 1.5s ease-out forwards;
+  pointer-events:none;
+}
+@keyframes explode{
+  from{opacity:1;transform:translate(0,0) scale(.6) rotate(0);}
+  to{opacity:0;transform:translate(var(--x),var(--y)) scale(1.6) rotate(720deg);}
 }
 
-/* ================= 卡片漂浮 ================= */
-.card-float {
-  animation: float 6s ease-in-out infinite;
-}
-
-@keyframes float {
-  0%,100% { transform: translateY(0); }
-  50% { transform: translateY(-12px); }
-}
-
-/* ================= 卡片 ================= */
-.card {
-  background: rgba(255,255,255,0.1);
-  backdrop-filter: blur(10px);
-  border-radius: 22px;
-  padding: 28px;
-  width: 100%;
-  max-width: 440px;
-  box-shadow: 0 30px 80px rgba(0,0,0,0.6);
-  animation: fadeIn 0.6s ease;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px) scale(0.95); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-h1 { text-align: center; margin-top: 0; }
-
-.info {
-  text-align: center;
-  font-size: 14px;
-  opacity: 0.85;
-  margin-bottom: 20px;
-}
-
-label {
-  display: block;
-  margin-top: 16px;
-  font-size: 14px;
-}
-
-input {
-  width: 100%;
-  margin-top: 6px;
-  padding: 14px;
-  border-radius: 14px;
-  border: none;
-  font-size: 16px;
-}
-
-button {
-  margin-top: 26px;
-  width: 100%;
-  padding: 16px;
-  border-radius: 16px;
-  border: none;
-  background: linear-gradient(135deg,#ff7ad9,#6c8cff);
-  color: #fff;
-  font-size: 18px;
-  cursor: pointer;
-  box-shadow: 0 0 28px rgba(255,122,217,0.7);
-  transition: transform .15s ease;
-}
-
-button:hover { transform: scale(1.06); }
-button:active { transform: scale(0.92); }
-
-/* ================= 成功畫面 ================= */
-#successCard {
-  display: none;
-  text-align: center;
-  animation: pop .5s cubic-bezier(.3,1.4,.5,1);
-}
-
-@keyframes pop {
-  from { opacity:0; transform: scale(.6); }
-  to { opacity:1; transform: scale(1); }
-}
-
-.gift {
-  font-size: 84px;
-  animation: bounce 1.2s infinite;
-}
-
-@keyframes bounce {
-  0%,100% { transform: translateY(0); }
-  50% { transform: translateY(-18px); }
-}
-
-/* ================= 爆炸 ================= */
-.confetti span {
-  position: absolute;
-  animation: explode 1.5s ease-out forwards;
-  pointer-events: none;
-}
-
-@keyframes explode {
-  from { opacity:1; transform: translate(0,0) scale(.6) rotate(0); }
-  to {
-    opacity:0;
-    transform: translate(var(--x),var(--y)) scale(1.6) rotate(720deg);
-  }
-}
-
-/* ================= 手機 ================= */
-@media (max-width:480px){
-  .card { max-width:94vw; padding:22px; }
+/* ===== 手機 ===== */
+@media(max-width:480px){
+  .card{max-width:94vw;padding:22px;}
 }
 </style>
 </head>
@@ -175,18 +123,16 @@ button:active { transform: scale(0.92); }
   <div class="card" id="formCard">
     <h1>🎁 交換禮物注音謎題</h1>
     <div class="info">預算：約 350 元<br>時間：1/1 ～ 1/8</div>
-
     <label>姓名<input id="name"></label>
     <label>注音<input id="zhuyin"></label>
     <label>提示<input id="hint"></label>
-
     <button id="submitBtn">送出</button>
   </div>
 
   <div class="card" id="successCard">
     <div class="gift">🎁</div>
     <h1>送出成功！</h1>
-    <p>謎題已鎖定 🔒</p>
+    <p>🔒 謎題已鎖定</p>
     <div class="confetti" id="confetti"></div>
   </div>
 </div>
@@ -196,30 +142,37 @@ button:active { transform: scale(0.92); }
 </audio>
 
 <script>
-const submitBtn = document.getElementById("submitBtn");
-const formCard = document.getElementById("formCard");
-const successCard = document.getElementById("successCard");
-const confetti = document.getElementById("confetti");
-const sound = document.getElementById("successSound");
-const reels = document.getElementById("reelsTransition");
+const submitBtn=document.getElementById("submitBtn");
+const formCard=document.getElementById("formCard");
+const successCard=document.getElementById("successCard");
+const confetti=document.getElementById("confetti");
+const sound=document.getElementById("successSound");
+const reels=document.getElementById("reelsTransition");
 
-submitBtn.onclick = () => {
-  reels.classList.add("active");
+submitBtn.onclick=()=>{
+  const name=nameInput.value.trim();
+  const zhuyin=zhuyinInput.value.trim();
+  const hint=hintInput.value.trim();
 
-  setTimeout(()=>{
-    formCard.style.display="none";
-    successCard.style.display="block";
-    explode();
+  if(!name||!zhuyin){alert("請填寫姓名與注音");return;}
 
-    try{
-      sound.currentTime=0;
-      sound.play();
-    }catch(e){}
-
-    if(navigator.vibrate){
-      navigator.vibrate(200);
-    }
-  },550);
+  fetch("/submit",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({name,zhuyin,hint})
+  })
+  .then(r=>{if(!r.ok)throw Error();return r.json();})
+  .then(()=>{
+    reels.classList.add("active");
+    setTimeout(()=>{
+      formCard.style.display="none";
+      successCard.style.display="block";
+      explode();
+      try{sound.currentTime=0;sound.play();}catch(e){}
+      if(navigator.vibrate)navigator.vibrate(200);
+    },550);
+  })
+  .catch(()=>alert("後台送出失敗"));
 };
 
 function explode(){
@@ -227,8 +180,7 @@ function explode(){
   for(let i=0;i<90;i++){
     const s=document.createElement("span");
     s.textContent=emojis[Math.floor(Math.random()*emojis.length)];
-    s.style.left="50%";
-    s.style.top="45%";
+    s.style.left="50%";s.style.top="45%";
     const a=Math.random()*Math.PI*2;
     const r=350+Math.random()*350;
     s.style.setProperty("--x",`${Math.cos(a)*r}px`);
@@ -242,4 +194,5 @@ function explode(){
 
 </body>
 </html>
+
 
