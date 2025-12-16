@@ -226,19 +226,46 @@ const ENTRY_HINT   = "entry.432217698";  // 提示
   const transition = document.getElementById("transition");
   const confetti = document.getElementById("confetti");
   const sound = document.getElementById("sound");
+submit.onclick = () => {
 
-  submit.onclick = () => {
-    transition.classList.add("active");
+  // ① 讀取欄位
+  const name   = document.getElementById("name").value.trim();
+  const zhuyin = document.getElementById("zhuyin").value.trim();
+  const hint   = document.getElementById("hint").value.trim();
 
-    setTimeout(() => {
-      form.style.display = "none";
-      success.style.display = "block";
-      explode();
-      sound.play();
-      navigator.vibrate?.(120);
-      transition.classList.remove("active");
-    }, 600);
-  };
+  // ② 防呆：空白不送
+  if (!name || !zhuyin || !hint) {
+    alert("請填寫所有欄位");
+    navigator.vibrate?.(80);
+    return;
+  }
+
+  // ③ 組資料
+  const data = new URLSearchParams();
+  data.append(ENTRY_NAME, name);
+  data.append(ENTRY_ZHUYIN, zhuyin);
+  data.append(ENTRY_HINT, hint);
+
+  // ④ 送到 Google 表單（最關鍵）
+  fetch(FORM_URL, {
+    method: "POST",
+    mode: "no-cors",
+    body: data
+  });
+
+  // ⑤ 原本動畫（保留）
+  transition.classList.add("active");
+
+  setTimeout(() => {
+    form.style.display = "none";
+    success.style.display = "block";
+    explode();
+    sound.play();
+    navigator.vibrate?.(120);
+    transition.classList.remove("active");
+  }, 600);
+};
+
 
   function explode() {
     const emojis = ["🎉","✨","🎁","💥","🌈"];
@@ -256,5 +283,6 @@ const ENTRY_HINT   = "entry.432217698";  // 提示
 
 </body>
 </html>
+
 
 
